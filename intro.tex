@@ -1,0 +1,42 @@
+\section{Traditional proofs}
+
+\subsection{Classical Proofs} 
+\definition A language $\mathcal{L}$ is a set of binary strings $x$.
+\definition $\mathcal{L}\in\textbf{NP} \iff \exists V\in \textbf{P}, \exists k\in \mathbb{N}\text{ s.t. }$
+\begin{itemize}
+    \item $x\in\mathcal{L} \implies \exists\text{poly}(|x|)\text{-long } w\in\{0,1\}^*:V(x,w) = 1$
+    \item $x\notin\mathcal{L} \implies \forall w\in\{0,1\}^*:V(x,w) = 0$
+\end{itemize}
+
+\subsection{Interactive Proofs}
+Let $A$ be "accept".
+\definition $(P, V)$ interactive for $\mathcal{L} \iff V\in\textbf{PPT}~\land$
+\begin{itemize}
+    \item $x\in\mathcal{L}\implies \text{Pr}((P,V)(x)=\text{A})\geq c$
+    \item $x\notin\mathcal{L}\implies\forall P^*,~\text{Pr}((P^*,V)(x)=A)\leq s$
+    \item $\exists~c,s\in[0,1]\text{ s.t. } c-s\geq 1/\text{poly}(|x|)$
+\end{itemize} 
+\definition Class of languages $\textbf{IP} = \{ \mathcal{L}\text{ s.t. }\exists \text{ an interactive proof} \}$
+
+\section{Zero Knowledge Proofs}
+\definition $\text{view}_V(P,V)[x]=\{r, (q_1,a_1,q_2,a_2,\dots) \}$
+\definition zero-knowledge for $\mathcal{L} \iff \forall\text{PPT }V^*~\exists\text{ poly time simulator Sim } \text{ s.t. }\forall x\in \mathcal{L}:$ 
+$$ \text{view}_V(P,V)[x] \approx \text{Sim}(x, 1^\lambda) $$
+
+We define the QR protocol with inputs N-modulus, y-statement and a generated r-secret to be:
+\begin{enumerate}
+    \item Prover sends $s = r^2 \pmod N$ (Commitment)
+    \item Verifier sends random bit $b \in \{0,1\}$
+    \item Prover sends $z$ (if $b=0, z=r$; if $b=1, z=rx$)
+    \item Verifier checks $z^2 \equiv s \cdot y^b \pmod N$
+\end{enumerate}
+\theorem The QR protocol is perfect zero knowledge.
+
+\proof We construct a simulator that guesses the verifier's $b$. As there are only two bits possible, the expected number of repetitions of the simulator is 2. The full proof for this can be found in \cite{GMR85}.
+
+\definition Let $\mathcal{L}_R = \{ x : \exists w \text{ s.t. } R(x,w) = \text{accept} \}$.
+\definition $(P,V)$ is proof of knowledge (POK) $\iff \exists \text{ PPT extractor } E \text{ s.t. } \forall x \in \mathcal{L}, \text{ in expected poly-time } E^P(x) \text{ outputs } w \text{ s.t. } R(x,w) = \text{accept}.$
+
+\theorem $\exists$ one-way function $\implies \forall \mathcal{L}\in\textbf{NP }\exists$ a computational zero knowledge interactive proof.
+
+The proof is not exactly disclosed. The idea is to show that an NP-Complete Problem has a ZK interactive Proof. \cite{GMW91}
